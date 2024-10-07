@@ -14,9 +14,9 @@ public class TicketServiceImpl implements TicketService {
      * Should only have private methods other than the one below.
      */
     private Integer totalPrice = 0;
-    private Integer infant = 0;
-    private Integer child = 0;
-    private Integer adult = 0;
+    private Integer infantQuantity = 0;
+    private Integer childQuantity = 0;
+    private Integer adultQuantity = 0;
     private paymentService paymentService; // In spring, we can adopt dependency injection like @Autowire
     private SeatReservationService seatReservationService; // In spring, we can adopt dependency injection like @Autowire
 
@@ -37,12 +37,12 @@ public class TicketServiceImpl implements TicketService {
                 .stream(ticketTypeRequests)
                 .forEach(this::processRequest);
 
-        if(adult == 0 && (infant > 0 || child > 0)){
+        if(adultQuantity == 0 && (infantQuantity > 0 || childQuantity > 0)){
             throw new IllegalArgumentException("Child and Infant tickets cannot be purchased without an Adult ticket.");
         }
 
         // Compute total quantity. Infant(s) are not allocated a seat
-        var totalQuantity = child + adult;
+        var totalQuantity = childQuantity + adultQuantity;
 
         if(totalQuantity <= Constant.NO_QUANTITY){
             throw new IllegalArgumentException("Minimum quantity: The required quantity should be at least 1");
@@ -64,16 +64,16 @@ public class TicketServiceImpl implements TicketService {
         }
 
         switch (request.getTicketType()){
-            case INFANT -> infant += request.getNoOfTickets();
+            case INFANT -> infantQuantity += request.getNoOfTickets();
 
             case CHILD -> {
                 totalPrice += request.getNoOfTickets() * Constant.FEE_15;
-                child += request.getNoOfTickets();
+                childQuantity += request.getNoOfTickets();
             }
 
             case ADULT -> {
                 totalPrice += request.getNoOfTickets() * Constant.FEE_25;
-                adult += request.getNoOfTickets();
+                adultQuantity += request.getNoOfTickets();
             }
 
             default -> throw new IllegalArgumentException("Invalid ticket request");
