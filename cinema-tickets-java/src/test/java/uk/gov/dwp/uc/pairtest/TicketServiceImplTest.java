@@ -58,9 +58,7 @@ public class TicketServiceImplTest {
         TicketTypeRequest infantTicket = new TicketTypeRequest(Type.INFANT, 1);
 
         // When / Then
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            ticketService.purchaseTickets(123L, childTicket, infantTicket);
-        });
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> ticketService.purchaseTickets(123L, childTicket, infantTicket));
 
         assertEquals("Child and Infant tickets cannot be purchased without an Adult ticket.", thrown.getMessage());
     }
@@ -71,9 +69,7 @@ public class TicketServiceImplTest {
         TicketTypeRequest adultTicket = new TicketTypeRequest(Type.ADULT, 26);
 
         // When / Then
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            ticketService.purchaseTickets(123L, adultTicket);
-        });
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> ticketService.purchaseTickets(123L, adultTicket));
 
         assertEquals("Maximum exceeded: Cannot purchase more than 25 tickets.", thrown.getMessage());
     }
@@ -81,9 +77,7 @@ public class TicketServiceImplTest {
     @Test
     public void testPurchaseWithNoTickets() {
         // When / Then
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            ticketService.purchaseTickets(123L);
-        });
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> ticketService.purchaseTickets(123L));
 
         assertEquals("Minimum quantity: The required quantity should be at least 1", thrown.getMessage());
     }
@@ -94,9 +88,7 @@ public class TicketServiceImplTest {
         TicketTypeRequest infantTicket = new TicketTypeRequest(Type.INFANT, 1);
 
         // When / Then
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            ticketService.purchaseTickets(123L, infantTicket);
-        });
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> ticketService.purchaseTickets(123L, infantTicket));
 
         assertEquals("Child and Infant tickets cannot be purchased without an Adult ticket.", thrown.getMessage());
     }
@@ -107,9 +99,8 @@ public class TicketServiceImplTest {
         TicketTypeRequest adultTicket = new TicketTypeRequest(null, 5);//Invalid request type
 
         // When / Then
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            ticketService.purchaseTickets(123L, adultTicket);
-        });
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
+                () -> ticketService.purchaseTickets(123L, adultTicket));
 
         assertEquals("Ticket type expected", thrown.getMessage());
     }
@@ -122,9 +113,7 @@ public class TicketServiceImplTest {
         TicketTypeRequest adultTicket3 = new TicketTypeRequest(null, 5);//Invalid request type
 
         // When / Then
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            ticketService.purchaseTickets(0L, adultTicket, adultTicket2, adultTicket3);
-        });
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> ticketService.purchaseTickets(0L, adultTicket, adultTicket2, adultTicket3));
 
         assertEquals("The account id not valid", thrown.getMessage());
     }
