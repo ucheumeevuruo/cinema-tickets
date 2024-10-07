@@ -96,11 +96,11 @@ public class TicketServiceImplTest {
     @Test
     public void testPurchaseTicketWithoutType(){
         // Given
-        TicketTypeRequest adultTicket = new TicketTypeRequest(null, 5);//Invalid request type
+        TicketTypeRequest invalidTicket = new TicketTypeRequest(null, 5);//Invalid request type
 
         // When / Then
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
-                () -> ticketService.purchaseTickets(123L, adultTicket));
+                () -> ticketService.purchaseTickets(123L, invalidTicket));
 
         assertEquals("Ticket type expected", thrown.getMessage());
     }
@@ -108,12 +108,12 @@ public class TicketServiceImplTest {
     @Test
     public void testPurchaseWithInvalidAccountId(){
         // Given
-        TicketTypeRequest adultTicket = new TicketTypeRequest(null, 5);//Invalid request type
-        TicketTypeRequest adultTicket2 = new TicketTypeRequest(null, 10);//Invalid request type
-        TicketTypeRequest adultTicket3 = new TicketTypeRequest(null, 5);//Invalid request type
+        TicketTypeRequest invalidTicket = new TicketTypeRequest(null, 5);//Invalid request type
+        TicketTypeRequest invalidTicket2 = new TicketTypeRequest(null, 10);//Invalid request type
+        TicketTypeRequest invalidTicket3 = new TicketTypeRequest(null, 5);//Invalid request type
 
         // When / Then
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> ticketService.purchaseTickets(0L, adultTicket, adultTicket2, adultTicket3));
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> ticketService.purchaseTickets(0L, invalidTicket, invalidTicket2, invalidTicket3));
 
         assertEquals("The account id not valid", thrown.getMessage());
     }
