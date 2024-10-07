@@ -8,7 +8,6 @@ import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
 import java.util.Arrays;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 public class TicketServiceImpl implements TicketService {
     /**
@@ -29,11 +28,11 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public void purchaseTickets(Long accountId, TicketTypeRequest... ticketTypeRequests) throws InvalidPurchaseException {
 
-        if(isNull(accountId) || accountId == Constant.INVALID_ACCOUNT_ID){
+        if(isNull(accountId) || accountId.equals(Constant.INVALID_ACCOUNT_ID)){
             throw new IllegalArgumentException("The account id not valid");
         }
 
-        // Process all the requests (infant, child, and adult)
+        // Process all the requests (infant, child, and adult) and compute amount, quantity
         Arrays
                 .stream(ticketTypeRequests)
                 .forEach(this::processRequest);
@@ -42,6 +41,7 @@ public class TicketServiceImpl implements TicketService {
             throw new IllegalArgumentException("Child and Infant tickets cannot be purchased without an Adult ticket.");
         }
 
+        // Compute total quantity. Infant(s) are not allocated a seat
         var totalQuantity = child + adult;
 
         if(totalQuantity <= Constant.NO_QUANTITY){
@@ -52,6 +52,7 @@ public class TicketServiceImpl implements TicketService {
             throw new IllegalArgumentException("Maximum exceeded: Cannot purchase more than 25 tickets.");
         }
 
+        // Make payment and reserve seats
         paymentService.makePayment(accountId, totalPrice);
         seatReservationService.reserveSeat(accountId, totalQuantity);
     }
@@ -63,7 +64,7 @@ public class TicketServiceImpl implements TicketService {
         }
 
         switch (request.getTicketType()){
-            case INFANT -> child += request.getNoOfTickets();
+            case INFANT -> infant += request.getNoOfTickets();
 
             case CHILD -> {
                 totalPrice += request.getNoOfTickets() * Constant.FEE_15;
@@ -80,7 +81,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     private interface Constant{
-        Long INVALID_ACCOUNT_ID = 0l;
+        Long INVALID_ACCOUNT_ID = 0L;
         Integer NO_QUANTITY = 0;
         Integer MAX_FEE = 25;
         Integer FEE_15 = 15;

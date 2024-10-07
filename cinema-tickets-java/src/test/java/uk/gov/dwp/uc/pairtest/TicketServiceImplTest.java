@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import thirdparty.seatbooking.SeatReservationService;
+import thirdparty.seatbooking.SeatReservationServiceImpl;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.enums.Type;
 
@@ -19,8 +20,8 @@ public class TicketServiceImplTest {
     @BeforeEach
     void setup(){
         // Mock the external services
-        paymentService = Mockito.mock(thirdparty.paymentgateway.paymentService.class);
-        seatReservationService = Mockito.mock(SeatReservationService.class);
+        paymentService = Mockito.mock(thirdparty.paymentgateway.paymentServiceImpl.class);
+        seatReservationService = Mockito.mock(SeatReservationServiceImpl.class);
 
         // Create an instance of TicketServiceImpl with mocked services
         ticketService = new TicketServiceImpl(paymentService, seatReservationService);
@@ -122,7 +123,7 @@ public class TicketServiceImplTest {
 
         // When / Then
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            ticketService.purchaseTickets(0l, adultTicket, adultTicket2, adultTicket3);
+            ticketService.purchaseTickets(0L, adultTicket, adultTicket2, adultTicket3);
         });
 
         assertEquals("The account id not valid", thrown.getMessage());
