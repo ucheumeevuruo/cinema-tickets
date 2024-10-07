@@ -1,6 +1,6 @@
 package thirdparty.paymentgateway;
 
-public class TicketPaymentServiceImpl implements TicketPaymentService {
+public class paymentServiceImpl implements paymentService {
 
     @Override
     public void makePayment(long accountId, int totalAmountToPay) {
